@@ -79,8 +79,6 @@ class RequestController extends Controller
             array_push($wasApproved, $approve['group_id']);
         }
 
-        // dd($wasApproved);
-
         foreach ($requested as $request) {
             array_push($inRequest, $request['group_id']);
         }
@@ -99,6 +97,7 @@ class RequestController extends Controller
             'sender_id' => Auth::id()
         ]);
 
+        Session::flash('requested', 'Request has been sent');
         return \redirect('exploreGroup');
     }
 
@@ -137,12 +136,42 @@ class RequestController extends Controller
     {
         $members = $group->requests()->with('user')->where('approval', true)->get();
         $requests = $group->requests()->with('user')->where('approval', '!=', 1)->get();
-        // dd($members);
 
         return view('assets.group.groupmembers', [
             'group' => $group,
             'members' => $members,
             'requests' => $requests
+        ]);
+    }
+
+    public function requestGroup()
+    {
+        $requestedGroups = Request::where('sender_id', Auth::id())->with('group', 'user')->get();
+        // dd($requestedGroups);
+        return view('assets.group.requestedgroup', [
+            'requestedGroups' => $requestedGroups
+        ]);
+    }
+
+    public function cancelGroupRequest(Request $request)
+    {
+        $request->delete();
+        Session::flash('cancelled', 'The Join request has been cancelled');
+        return \redirect('requestGroup');
+    }
+
+    public function collaborationGroups()
+    {
+        $collaborationGroups = Request::where('sender_id', Auth::id())->where('approval', 1)->with('group', 'user')->get();
+
+        // dd($collaborationGroups);
+
+        // foreach ($collaborationGroups as $collaborationGroup) {
+        //     dump($collaborationGroup->group());
+        // }
+
+        return view('assets.group.collaborationgroups', [
+            'collaborationGroups' => $collaborationGroups
         ]);
     }
 }

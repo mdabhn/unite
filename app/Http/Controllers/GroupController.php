@@ -13,9 +13,7 @@ class GroupController extends Controller
     public function index()
     {
         $id = Auth::id();
-
         $myGroups = \App\Group::with('user')->where('admin_id', $id)->get();
-
         return view('assets.group.mygroups', \compact('myGroups'));
     }
 

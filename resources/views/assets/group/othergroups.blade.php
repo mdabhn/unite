@@ -26,10 +26,8 @@
                         Admin: <a href="#">{{$group->user->name}}</a>
                     </div>
                     @if (in_array($group->id, $inRequest))
-                    <form action="" class="from-inline">
-                        @csrf
-                        <button class="btn btn-danger float-right ml-1">Cancel The Request</button>
-                    </form>
+                    {{-- <a href="#" class="btn btn-danger float-right ml-1">Cancel
+                        The Request</a> --}}
                     <button href="#" class="btn btn-secondary float-right" disabled>Requested </a>
                         @else
                         <a href="/request/{{$group->id}}" class="btn btn-dark float-right">Request to Join</a>
@@ -51,4 +49,13 @@
         min-width: 370px;
     }
 </style>
+@endsection
+
+@section('js')
+<script>
+    if("<?php echo Session::has("requested") ?>"){
+        toastr.success("<?php echo Session::get("requested") ?>", 'Request cancelled');
+    }
+
+</script>
 @endsection

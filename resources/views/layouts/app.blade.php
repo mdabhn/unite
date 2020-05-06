@@ -12,8 +12,8 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <!-- Styles -->
-    <link href="{{ asset('css/toastr.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     @yield('css')
 </head>
 
@@ -83,15 +83,20 @@
                             Home
                         </a>
                         @endif
-
-                        <a href="{{route('group.create')}}" class="list-group-item list-group-item-action">
-                            Create Group
-                        </a>
                         <a href="{{route('group.index')}}" class="list-group-item list-group-item-action">
                             My Group
                         </a>
+                        <a href="{{route('group.create')}}" class="list-group-item list-group-item-action">
+                            Create Group
+                        </a>
                         <a href="{{route('exploreGroup')}}" class="list-group-item list-group-item-action">
                             Explore Group
+                        </a>
+                        <a href="{{route('requestGroup')}}" class="list-group-item list-group-item-action">
+                            Requeted Group
+                        </a>
+                        <a href="{{route('collaborationGroups')}}" class="list-group-item list-group-item-action">
+                            Collaboration Groups
                         </a>
                     </div>
                 </div>
@@ -107,11 +112,9 @@
     </div>
 
     <script src="{{ asset('js/app.js') }}" defer></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js">
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" defer>
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     @yield('js')

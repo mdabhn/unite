@@ -40,3 +40,9 @@ Route::delete('/group/{group}/deleteReq/{request}', 'RequestController@deleteReq
 Route::get('/group/{group}/acceptReq/{request}', 'RequestController@acceptRequest')->name('acceptRequest');
 
 Route::get('/members/{group}', 'RequestController@members')->name('members');
+
+Route::get('/requestGroup', 'RequestController@requestGroup')->name('requestGroup');
+
+Route::get('/cancelGroupRequest/{request}', 'RequestController@cancelGroupRequest')->name('cancelGroupRequest');
+
+Route::get('/collaborationGroups', 'RequestController@collaborationGroups')->name('collaborationGroups');
