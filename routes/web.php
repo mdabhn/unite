@@ -46,3 +46,11 @@ Route::get('/requestGroup', 'RequestController@requestGroup')->name('requestGrou
 Route::get('/cancelGroupRequest/{request}', 'RequestController@cancelGroupRequest')->name('cancelGroupRequest');
 
 Route::get('/collaborationGroups', 'RequestController@collaborationGroups')->name('collaborationGroups');
+
+Route::post('/assignTask/{task}', 'RequestController@assignTask')->name('assignTask');
+
+Route::get('test/{id}', function ($id) {
+    $data = \App\Attachment::find($id);
+    // dd($data);
+    return response()->download($data->attachment);
+});

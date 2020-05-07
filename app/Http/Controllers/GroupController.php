@@ -72,17 +72,16 @@ class GroupController extends Controller
         $activeTasks = $group->tasks()->where('type', 'active')->where('archived', 0)->get();
         $progressTasks = $group->tasks()->where('type', 'progress')->where('archived', 0)->get();
         $completedTasks = $group->tasks()->where('type', 'completed')->where('archived', 0)->get();
-
         $requests = $group->requests()->with('user')->where('approval', false)->get();
-
-        // dd($requests->toArray());
+        $members = $group->requests()->with('user')->where('approval', true)->get();
 
         return view('assets.group.onegroup', [
             'group' => $group,
             'activeTasks' => $activeTasks,
             'progressTasks' => $progressTasks,
             'completedTasks' => $completedTasks,
-            'requests' => $requests
+            'requests' => $requests,
+            'members' => $members
         ]);
     }
 }

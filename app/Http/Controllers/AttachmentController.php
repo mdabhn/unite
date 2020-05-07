@@ -45,8 +45,9 @@ class AttachmentController extends Controller
         Attachment::create([
             'group_id' => $group->id,
             'user_id' => Auth::id(),
-            'attachment' => 'upload/files/' . $attachmentName,
-            'name' => $request->file->getClientOriginalName()
+            'attachment' => 'upload\\files\\' . $attachmentName,
+            'name' => $request->file->getClientOriginalName(),
+            'task_id' => $request->task_id
         ]);
 
         \App\Log::create([

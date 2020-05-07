@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Group;
 use App\Task;
 use App\Request;
-
+use App\TaskDetail;
+use Illuminate\Http\Request as FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Session;
 
@@ -164,14 +165,22 @@ class RequestController extends Controller
     {
         $collaborationGroups = Request::where('sender_id', Auth::id())->where('approval', 1)->with('group', 'user')->get();
 
-        // dd($collaborationGroups);
-
-        // foreach ($collaborationGroups as $collaborationGroup) {
-        //     dump($collaborationGroup->group());
-        // }
-
         return view('assets.group.collaborationgroups', [
             'collaborationGroups' => $collaborationGroups
         ]);
+    }
+
+    public function assignTask(Task $task, FormRequest $data)
+    {
+        if ($data->assigned_to !== null) {
+            TaskDetail::create([
+                'task_id' => $task->id,
+                'assined_id' => $data->assigned_to
+            ]);
+
+            Session::flash('taskAssigened', 'Task has been Assigend');
+        }
+
+        return \redirect()->back();
     }
 }

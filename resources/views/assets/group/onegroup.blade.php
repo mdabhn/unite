@@ -46,26 +46,51 @@
                                                 <small class="text-muted">Created By {{$activeTask->user->name}}</small>
                                                 <br>
                                                 <small class="text-muted">Assigned to
-                                                    {{$group->sub_id ? $group->sub_id : '``open for all``'}}</small>
+                                                    {{$activeTask->taskdetail ? $activeTask->taskdetail->user->name
+                                                    : '``open for all``'}}</small>
                                             </h5>
 
                                             <small class="text-muted">Created #
                                                 {{$activeTask->created_at->diffForHumans()}}</small>
                                         </div>
-                                        @if ($group->admin_id == Auth::id())
+                                        @if ($group->admin_id == Auth::id() && ($activeTask->taskdetail) == null)
                                         <div class="modal-body">
                                             <small class="text-muted">
                                                 Assign Task To
                                             </small>
-                                            <select class="custom-select w-50 ml-3" id="assigned_to" name="assigned_to">
-                                                <option selected>Choose...</option>
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
-                                            </select>
+                                            <form action="{{route('assignTask', $activeTask->id)}}" method="POST"
+                                                style="display: inline">
+                                                @csrf
+                                                <select class="custom-select w-50 ml-3" id="assigned_to"
+                                                    name="assigned_to">
+                                                    <option selected value="{{null}}">Choose...</option>
+                                                    @if (count($members) > 0)
+                                                    @foreach ($members as $member)
+                                                    <option value="{{$member->user->id}}">{{$member->user->name}}
+                                                    </option>
+                                                    @endforeach
+                                                    @endif
+                                                </select>
+                                                @if (count($members) > 0)
+                                                <button type="submit" class="btn btn-sm btn-dark ml-2">Assign</button>
+                                                @endif
+                                            </form>
                                         </div>
                                         @endif
-
+                                        {{-- new added --}}
+                                        <form action="{{route('attachment', $group->id)}}" method="POST"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            <input type="number" name="task_id" value="{{$activeTask->id}}" hidden>
+                                            <div class="card-header">
+                                                <div class="form-group text-center">
+                                                    <label for="file">Upload</label>
+                                                    <input type="file" name="file" id="file" required>
+                                                    <button class="btn btn-success" type="submit">Upload</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        {{-- end --}}
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-dismiss="modal">Close</button>
@@ -100,16 +125,19 @@
                         <li class="list-group-item">
                             {{$progressTask->task}}
                             <br>
-                            <small class="text-muted">Created By {{$group->name}}</small>
+                            <small class="text-muted">Created By {{$progressTask->user->name}}</small>
                             ||
-                            <small class="text-muted">Assigned to {{$group->sub_id}}</small>
+                            <small class="text-muted">Assigned
+                                {{$progressTask->taskdetail ? $progressTask->taskdetail->user->name : 'For all'}}</small>
                             <br>
+                            @if ($group->admin_id == Auth::id() || $progressTask->creator_id == Auth::id())
                             <form action="{{route('task.destroy', $progressTask->id)}}" style="display: inline"
                                 method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-sm btn-danger float-right" type="submit">Delete</button>
                             </form>
+                            @endif
                             <button type="button" class="btn btn-dark btn-sm float-right mr-1" data-toggle="modal"
                                 data-target="#popup">
                                 Assign
@@ -125,17 +153,41 @@
                                             <small class="text-muted">Created #
                                                 {{$progressTask->created_at->diffForHumans()}}</small>
                                         </div>
+                                        @if ($group->admin_id == Auth::id() && ($progressTask->taskdetail) == null)
                                         <div class="modal-body">
                                             <small class="text-muted">
                                                 Assign Task To
                                             </small>
-                                            <select class="custom-select w-50 ml-3" id="assigned_to" name="assigned_to">
-                                                <option selected>Choose...</option>
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
-                                            </select>
+                                            <form action="{{route('assignTask', $progressTask->id)}}" method="POST"
+                                                style="display: inline">
+                                                @csrf
+                                                <select class="custom-select w-50 ml-3" id="assigned_to"
+                                                    name="assigned_to">
+                                                    <option selected value="{{null}}">Choose...</option>
+                                                    @if (count($members) > 0)
+                                                    @foreach ($members as $member)
+                                                    <option value="{{$member->user->id}}">{{$member->user->name}}
+                                                    </option>
+                                                    @endforeach
+                                                    @endif
+                                                </select>
+                                                @if (count($members) > 0)
+                                                <button type="submit" class="btn btn-sm btn-dark ml-2">Assign</button>
+                                                @endif
+                                            </form>
                                         </div>
+                                        @endif
+                                        <form action="{{route('attachment', $group->id)}}" method="POST"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="card-header">
+                                                <div class="form-group text-center">
+                                                    <label for="file">Upload</label>
+                                                    <input type="file" name="file" id="file" required>
+                                                    <button class="btn btn-success" type="submit">Upload</button>
+                                                </div>
+                                            </div>
+                                        </form>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-dismiss="modal">Close</button>
@@ -194,4 +246,12 @@
         text-transform: uppercase;
     }
 </style>
+@endsection
+
+@section('js')
+<script>
+    if("<?php echo Session::has("taskAssigened") ?>"){
+        toastr.success("<?php echo Session::get("taskAssigened") ?>", 'Task');
+    }
+</script>
 @endsection

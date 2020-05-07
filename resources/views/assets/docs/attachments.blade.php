@@ -21,7 +21,8 @@
                     <th scope="col">Uploaded By</th>
                     <th scope="col">Docs</th>
                     <th scope="col">@</th>
-                    <th scope="col">Approved</th>
+                    <th scope="col">View</th>
+                    <th scope="col">Download</th>
                     <th scope="col">Delete</th>
                 </tr>
             </thead>
@@ -30,9 +31,15 @@
                 <tr class="text-center">
                     <td>{{$key + 1}}</td>
                     <td>{{$attachment->user->name}}</td>
-                    <td>{{$attachment->attachment}}</td>
+                    <td>{{$attachment->name}}</td>
                     <td>{{$attachment->created_at->diffForHumans()}}</td>
-                    <td><a href="" class="btn btn-sm btn-success">Approve</a></td>
+                    <td>
+                        <a href="http://127.0.0.1:8887/{{$attachment->attachment}}" target="_blank">View</a>
+                    </td>
+                    <td>
+                        {{-- <a href="" class="btn btn-sm btn-success">Approve</a> --}}
+                        <a href="/test/{{$attachment->id}}">Download</a>
+                    </td>
                     <td>
                         <form action="{{route('attachmentDelete', $attachment->id)}}" method="POST">
                             @csrf
@@ -49,8 +56,15 @@
 
 </div>
 @endsection
-@section('css')
-<style>
-
-</style>
+@section('js')
+<script>
+    if("<?php echo Session::has("uploaded") ?>"){
+        toastr.success("<?php echo Session::get("uploaded") ?>", 'File Uploaded');
+    }
+</script>
+<script>
+    if("<?php echo Session::has("attachmentDeleted") ?>"){
+        toastr.error("<?php echo Session::get("attachmentDeleted") ?>", 'File Has been Deleted');
+    }
+</script>
 @endsection
