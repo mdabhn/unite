@@ -215,6 +215,7 @@ class RequestController extends Controller
 
     public function profile(User $user)
     {
+        // dd(substr($user->name, 0, 1));
         return view('assets.profile.profile', [
             'user' => $user
         ]);

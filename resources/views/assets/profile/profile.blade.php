@@ -8,12 +8,11 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="profile-img">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog"
-                            alt="" />
-                        {{-- <img src="{{$user->profile->avatar ? $user->profile->avatar : 'https://via.placeholder.com/150'}}"
-                        alt="" /> --}}
+                        {{-- <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog"
+                            alt="" /> --}}
+                        <img src="https://via.placeholder.com/275x183.png?text={{substr($user->name, 0, 1)}}" alt="" />
                         @if (Auth::id() === $user->id)
-                        <div class="file btn btn-lg btn-primary">
+                        <div class=" file btn btn-lg btn-primary">
                             Change Photo
                             <input type="file" name="file" />
                         </div>
@@ -65,17 +64,19 @@
                         <a href="">{{$user->profile->interest}}</a><br />
                         <a href="">Available and Active</a>
                         <p>SKILLS</p>
-                        <a href="">Web Designer</a><br />
+                        <a href="">{{$user->profile->interest}}</a><br />
+                        {{-- <a href="">Web Designer</a><br />
                         <a href="">Web Developer</a><br />
                         <a href="">WordPress</a><br />
                         <a href="">WooCommerce</a><br />
-                        <a href="">PHP, .Net</a><br />
+                        <a href="">PHP, .Net</a><br /> --}}
                     </div>
                 </div>
                 <div class="col-md-8">
                     <div class="tab-content profile-tab" id="myTabContent">
                         {{-- HomeTab --}}
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            @if (Auth::id() === $user->id)
                             <div class="row">
                                 <div class="col-md-6">
                                     <label>User Id</label>
@@ -84,6 +85,7 @@
                                     <p>{{$user->id}}</p>
                                 </div>
                             </div>
+                            @endif
                             <div class="row">
                                 <div class="col-md-6">
                                     <label>Name</label>
