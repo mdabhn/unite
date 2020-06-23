@@ -28,7 +28,7 @@
         @foreach ($groups as $group)
         @if (in_array($group->id, $wasApproved))
         @elseif($group->admin_id != Auth::id())
-        <div class="card shadow mt-3 mx-1 my-1 mx-auto">
+        <div class="card shadow mt-3 mx-2 p-1 my-1 my-2">
             <div class="media mx-2 my-2 _media">
                 <div class="media-body">
                     <div class="main">
